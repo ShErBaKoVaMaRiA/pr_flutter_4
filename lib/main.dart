@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_1/cubit/cubit.dart';
-import 'package:flutter_app_1/cubit/work_theme.dart';
-
+import 'package:flutter_app_1/window_2.dart';
+import 'package:flutter_app_1/work_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,89 +17,57 @@ class MyApp extends StatelessWidget {
           final themeProvider = Provider.of<WorkTheme>(context);
 
           return MaterialApp(
-            title: "Практическая работа №4",
+            title: "Практическая работа №5",
             themeMode: themeProvider.themeMode,
             theme: Themes_App.lightTheme,
             darkTheme: Themes_App.darkTheme,
-            home: BlocProvider(
-              create: (_) => Cubit_File(),
-              child: _HomePage(),
-            ),
+            home: const _HomePage(title: 'Практическая работа №5'),
           );
         },
       );
 }
 
 class _HomePage extends StatefulWidget {
+  const _HomePage({Key? key, required this.title}) : super(key: key);
+  final String title;
+
   @override
-  HomePage createState() => HomePage();
+  State<_HomePage> createState() => _MyHomePageState();
 }
 
-List<Widget> history = [];
+class _MyHomePageState extends State<_HomePage> {
+  late bool isDark;
+  TextEditingController text = TextEditingController();
 
-class HomePage extends State<_HomePage> {
-  late bool isDark; //темная ли тема
+  final Future<SharedPreferences> sharedPreferences =
+      SharedPreferences.getInstance();
 
   @override
   Widget build(BuildContext context) {
     isDark = Provider.of<WorkTheme>(context).themeMode == ThemeMode.dark;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Практическая работа №4"), //Заголовок
+        title: Text(widget.title),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          //Объекты формы
           children: <Widget>[
-            BlocBuilder<Cubit_File, HomeState>(
-                builder: (context, state) => Text(
-                      state.counter.toString(),
-                      style: Theme.of(context).textTheme.headline4,
-                    )),
-            //Кнопка +
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(shape: const CircleBorder()),
-              child: Container(
-                width: 70,
-                height: 70,
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(shape: BoxShape.circle),
-                child: const Text("+"),
+            TextField(
+              controller: text,
+              decoration: InputDecoration(
+                hintText: "Введите текст",
               ),
-              onPressed: () {
-                context.read<Cubit_File>().plus(isDark ? 2 : 1);
-
-                if (isDark)
-                  addItem('2 - темная тема');
-                else
-                  addItem('1 - светлая тема');
-              },
             ),
-            //Кнопка -
             ElevatedButton(
-                style: ElevatedButton.styleFrom(shape: const CircleBorder()),
-                child: Container(
-                  width: 70,
-                  height: 70,
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(shape: BoxShape.circle),
-                  child: const Text("-"),
-                ),
                 onPressed: () {
-                  context.read<Cubit_File>().minus(isDark ? 2 : 1);
-                  if (isDark)
-                    addItem('-2 - темная тема');
-                  else
-                    addItem('-1 - светлая тема');
-                }),
-
-            Expanded(
-                child: ListView.builder(
-              itemCount: history.length,
-              itemBuilder: (context, index) => history[index],
-            ))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (c) => Window_2(text: text.text)));
+                },
+                child: const Text("Перейти на другую страницу")),
           ],
         ),
       ),
@@ -111,16 +78,13 @@ class HomePage extends State<_HomePage> {
       ),
     );
   }
-
-  void addItem(String th) {
-    {
-      setState(
-        () {
-          history.add(
-            Text(th),
-          );
-        },
-      );
-    }
-  }
 }
+
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: () {
+//           Provider.of<WorkTheme>(context, listen: false).updateTheme(!isDark);
+//         },
+//       ),
+//     );
+//   }
+// }
