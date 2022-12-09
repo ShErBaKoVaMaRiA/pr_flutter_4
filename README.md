@@ -1,16 +1,29 @@
-# flutter_app_1
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# ПРАКТИЧЕСКАЯ РАБОТА №5
+## «Работа с SharedPrefrences»
+Цель работы: Реализовать передачу данных между экранами. (Оценка 4)С охранение данных в SharedPrefrences. 
+Реализовать восстановление данных после закрытия приложения. Если есть данные в SharedPrefrences открыть 2 экран, если данных нет, то открыть 1 экран. Так же реализовать восстановление темы приложения. (Оценка 5)
+Ход работы:
+В проекте данной практикой работы присутствует 3 файла.
+1.	Для работы с темами, оставленный из предыдущей практикой работы. – work_theme
+2.	Для реализации основного окна, где происходит ввод данных – main.
+3.	Для реализации второго окна, куда передаются данные – window_2.
+Рассмотрим файлы по отдельности.
+Файл для работы с темами повторно рассматривать не будем, о нем можно прочитать в практической работе №4.
+Файл «Window_2».
+В данной файле реализовано всего два виджета.
+В «SafeArea» добавлен объект текста, в который переносятся данные из первого окна. И «floatingActionButton» на данном окне данная кнопка отвечает за переход в предыдущее окно с помощью «Navigator».
+Файл «Main».
+В данном файле присутствует три виджета:
+•	TextField – Текст для ввода, который будет передан во второе окно.
+•	ElevatedButton – данная кнопка отвечает за передачу данных в следующее окно.
+•	floatingActionButton – данная кнопка отвечает за изменение темы программы как и в прошлой практической работе.
+В данном файле остались команды для работы с темой проекта, данная тема переносится и на второе окно программы, т.к. меняется тема всей программы.
+Рассмотрим сам SharedPrefrences.
+•	Для создания экземпляра объекта используется команда - SharedPreferences preferences = await SharedPreferences.getInstance().
+•	Для чтения данных используется команда - preferences.getString().
+•	Для записи данных - preferences.setString.
+•	Для удаления данных - preferences.remove.
+•	Для удаления всех данных - await preferences.clear().
+Рассмотрим работу программы:
+Вывод:
+При выполнении практической работы была изучена работа с SharedPrefrences для  передачи данных между окон. Также было сделано изменение темы программе на основе предыдущей практической работы.
